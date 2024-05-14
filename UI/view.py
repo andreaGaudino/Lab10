@@ -1,5 +1,7 @@
 import flet as ft
 
+from database.DAO import DAO
+
 
 class View(ft.UserControl):
     def __init__(self, page: ft.Page):
@@ -25,7 +27,13 @@ class View(ft.UserControl):
         self._txtAnno = ft.TextField(label="Anno")
         self._btnCalcola = ft.ElevatedButton(text="Calcola Confini", on_click=self._controller.handleCalcola)
         row1 = ft.Row([self._txtAnno, self._btnCalcola], alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row1)
+
+        #row 2
+        self._dropStato = ft.Dropdown(label = "Stato")
+        self.riempiDropdown()
+        self._btnStatiRaggiungibili = ft.ElevatedButton(text="Stati raggiungibili", on_click=self._controller.handleStatiRaggiungibili)
+        row2 = ft.Row([self._dropStato, self._btnStatiRaggiungibili], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.add(row1, row2)
         # List View where the reply is printed
         self._txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
         self._page.controls.append(self._txt_result)
@@ -49,4 +57,10 @@ class View(ft.UserControl):
         self._page.update()
 
     def update_page(self):
+        self._page.update()
+
+    def riempiDropdown(self):
+        lista = DAO.getAllCountries()
+        for country in lista:
+            self._dropStato.options.append(ft.dropdown.Option(key=country.StateAbb, text=country.StateNme))
         self._page.update()
