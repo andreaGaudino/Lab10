@@ -10,6 +10,7 @@ class Model:
         self.situazioni = []
         self.nazioni = []
         self.result = {}
+        self.idMap = {}
 
 
     def getGrafo(self, year):
@@ -18,11 +19,15 @@ class Model:
         self.grafo.add_nodes_from(DAO.getCountriesYear(year))
         for row in self.situazioni:
             self.grafo.add_edge(row.state1no, row.state2no)
+            self.idMap[row.state1no] = row.state1ab
 
     def getNumNodes(self):
         return len(self.grafo.nodes)
     def getNumEdges(self):
         return len(self.grafo.edges)
+
+    def getName(self, code):
+        return self.idMap[code]
 
 
     def getConnessa(self):
@@ -49,10 +54,11 @@ class Model:
 
     def getCompConnessa(self, v0):
         lista = []
-        connComp = nx.node_connected_component(self.grafo, int(v0))
-        connComp.remove(int(v0))
-        for i in connComp:
-            for j in self.nazioni:
-                if i == j.CCode:
-                    lista.append(j.StateNme)
+        if v0 in self.grafo.nodes:
+            connComp = nx.node_connected_component(self.grafo, v0)
+            connComp.remove(v0)
+            for i in connComp:
+                for j in self.nazioni:
+                    if i == j.CCode:
+                        lista.append(j.StateNme)
         return lista

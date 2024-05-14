@@ -36,6 +36,7 @@ class Controller:
             self._view.create_alert("Anno inserito non valido")
         self._model.getGrafo(intAnno)
         lista_raggiungibili = self._model.getCompConnessa(stato)
+        #nome_stato = self._model.getName(int(stato))
         self._view._txt_result.controls.append(ft.Text(f"Lo stato {stato} può raggiungere {len(lista_raggiungibili)} stati:"))
         lista_raggiungibili.sort()
         for i in lista_raggiungibili:
