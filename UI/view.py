@@ -62,5 +62,5 @@ class View(ft.UserControl):
     def riempiDropdown(self):
         lista = DAO.getAllCountries()
         for country in lista:
-            self._dropStato.options.append(ft.dropdown.Option(key=country.StateAbb, text=country.StateNme))
+            self._dropStato.options.append(ft.dropdown.Option(key=country.CCode, text=country.StateNme))
         self._page.update()

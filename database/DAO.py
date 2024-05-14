@@ -38,3 +38,19 @@ class DAO():
         cursor.close()
         conn.close()
         return result
+
+    @staticmethod
+    def getCountriesYear(year):
+        conn = DBConnect.get_connection()
+
+        result = []
+
+        cursor = conn.cursor()
+        query = "SELECT distinct(c.state1no) FROM contiguity c WHERE c.year <= %s"
+        cursor.execute(query, (year,))
+
+        for row in cursor:
+            result.append(row[0])
+        cursor.close()
+        conn.close()
+        return result

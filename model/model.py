@@ -15,10 +15,9 @@ class Model:
     def getGrafo(self, year):
         self.situazioni = DAO.getAllBeforYear(year)
         self.nazioni = DAO.getAllCountries()
-        for i in self.nazioni:
-            self.grafo.add_node(i.StateAbb)
+        self.grafo.add_nodes_from(DAO.getCountriesYear(year))
         for row in self.situazioni:
-            self.grafo.add_edge(row.state1ab, row.state2ab)
+            self.grafo.add_edge(row.state1no, row.state2no)
 
     def getNumNodes(self):
         return len(self.grafo.nodes)
@@ -27,24 +26,33 @@ class Model:
 
 
     def getConnessa(self):
+        #count = 0
+        # print(self.getNumNodes())
+        # print(self.getNumEdges())
+
+        # for i in self.grafo.nodes:
+        #     print(i)
         for v in self.grafo.nodes:
             stato = ""
             confini = self.grafo.degree[v]
             for i in self.nazioni:
-                if i.StateAbb == v:
+                if i.CCode == v:
                     stato = i.StateNme
 
-            if stato == "":
-                stato = v
+            # if stato == "":
+            #     stato = v
             self.result[stato] = confini
-        return self.result, nx.number_connected_components(self.grafo)
+            # if confini != 0:
+            #     count+=1
+        ciao = nx.connected_components(self.grafo)
+        return self.result, len(list(ciao))
 
     def getCompConnessa(self, v0):
         lista = []
-        connComp = nx.node_connected_component(self.grafo, v0)
-        connComp.remove(v0)
+        connComp = nx.node_connected_component(self.grafo, int(v0))
+        connComp.remove(int(v0))
         for i in connComp:
             for j in self.nazioni:
-                if i == j.StateAbb:
+                if i == j.CCode:
                     lista.append(j.StateNme)
         return lista
