@@ -45,12 +45,15 @@ class DAO():
 
         result = []
 
-        cursor = conn.cursor()
-        query = "SELECT distinct(c.state1no) FROM contiguity c WHERE c.year <= %s"
+        cursor = conn.cursor(dictionary = True)
+        query = """SELECT distinct (c2.StateAbb), c2.CCode , c2.StateNme 
+                FROM countries.contiguity c, countries.country c2 
+                where c.state1no = c2.CCode and c.year <= %s
+                order by c2.StateNme """
         cursor.execute(query, (year,))
 
         for row in cursor:
-            result.append(row[0])
+            result.append(Stati(**row))
         cursor.close()
         conn.close()
         return result

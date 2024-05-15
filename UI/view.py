@@ -29,15 +29,16 @@ class View(ft.UserControl):
         row1 = ft.Row([self._txtAnno, self._btnCalcola], alignment=ft.MainAxisAlignment.CENTER)
 
         #row 2
-        self._dropStato = ft.Dropdown(label = "Stato")
-        self.riempiDropdown()
-        self._btnStatiRaggiungibili = ft.ElevatedButton(text="Stati raggiungibili", on_click=self._controller.handleStatiRaggiungibili)
+        self._dropStato = ft.Dropdown(label = "Stato", disabled=True)
+
+        self._btnStatiRaggiungibili = ft.ElevatedButton(text="Stati raggiungibili", on_click=self._controller.handleStatiRaggiungibili, disabled=True)
         row2 = ft.Row([self._dropStato, self._btnStatiRaggiungibili], alignment=ft.MainAxisAlignment.CENTER)
         self._page.add(row1, row2)
         # List View where the reply is printed
         self._txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
         self._page.controls.append(self._txt_result)
         self._page.update()
+
 
     @property
     def controller(self):
@@ -59,8 +60,8 @@ class View(ft.UserControl):
     def update_page(self):
         self._page.update()
 
-    def riempiDropdown(self):
-        lista = DAO.getAllCountries()
-        for country in lista:
-            self._dropStato.options.append(ft.dropdown.Option(key=country.CCode, text=country.StateNme))
-        self._page.update()
+    # def riempiDropdown(self, year):
+    #     lista = DAO.getCountriesYear(int(year))
+    #     for country in lista:
+    #         self._dropStato.options.append(ft.dropdown.Option(key=country.CCode, text=country.StateNme))
+    #     self._page.update()

@@ -16,10 +16,13 @@ class Model:
     def getGrafo(self, year):
         self.situazioni = DAO.getAllBeforYear(year)
         self.nazioni = DAO.getAllCountries()
-        self.grafo.add_nodes_from(DAO.getCountriesYear(year))
+        lista = DAO.getCountriesYear(year)
+        for i in lista:
+            self.grafo.add_node(i.CCode)
+            self.idMap[i.CCode] = i.StateNme
         for row in self.situazioni:
             self.grafo.add_edge(row.state1no, row.state2no)
-            self.idMap[row.state1no] = row.state1ab
+
 
     def getNumNodes(self):
         return len(self.grafo.nodes)
